@@ -1,44 +1,70 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import './App.css';
-import { fetchWeather } from "./services/weather-api";
-
-interface WeatherData {
-  name: string;
-  weather: { description: string }[];
-  main: { temp: number };
-}
+import { fetchWeather, fetchForecast, WeatherData, ForecastData } from './services/weather-api';
+import SearchBar from './components/search-bar';
+import WeatherCard from './components/weather-card';
+import Forecast from './components/forecast';
 
 function App() {
-  const [city, setCity] = useState('');
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [error, setError] = useState(null);
+  const [forecast, setForecast] = useState<ForecastData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = async () => {
+  const handleSearch = async (city: string) => {
+    setLoading(true);
+    setError(null);
+
     try {
-      const data = await fetchWeather(city);
-      setWeather(data);
-      setError(null);
+      const [weatherData, forecastData] = await Promise.all([
+        fetchWeather(city),
+        fetchForecast(city)
+      ]);
+
+      setWeather(weatherData);
+      setForecast(forecastData);
     } catch (err) {
-      alert('Error fetching weather data');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
+      setError(errorMessage);
+      setWeather(null);
+      setForecast(null);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
       <div className="App">
-        <input
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder={"Enter city name"}
-        />
-        <button onClick={handleSearch}>Search</button>
+        <header className="app-header">
+          <h1>Weather App</h1>
+          <SearchBar onSearch={handleSearch} loading={loading} />
+        </header>
 
-        {weather && (
-            <div className="mt-4 p-4 border rounded">
-              <h2 className="text-xl font-bold">{weather.name}</h2>
-              <p>{weather.weather[0].description}</p>
-              <p>{weather.main.temp} °C</p>
-            </div>
-        )}
+        <main className="app-main">
+          {error && (
+              <div className="error-message">
+                <p>{error}</p>
+              </div>
+          )}
+
+          {weather && (
+              <div className="weather-section">
+                <WeatherCard weather={weather} />
+              </div>
+          )}
+
+          {forecast && (
+              <div className="forecast-section">
+                <Forecast forecast={forecast} />
+              </div>
+          )}
+
+          {!weather && !loading && !error && (
+              <div className="welcome-message">
+                <p>Enter a city name to get current weather and forecast</p>
+              </div>
+          )}
+        </main>
       </div>
   );
 }
