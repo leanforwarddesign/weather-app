@@ -8,7 +8,7 @@ interface ForecastProps {
 
 const Forecast: React.FC<ForecastProps> = ({ forecast }) => {
     // Get daily forecasts (one per day)
-    const dailyForecasts = forecast.list.filter((item, index) => index % 8 === 0).slice(0, 5);
+    const dailyForecasts = forecast.list.filter((item, index) => index % 8 === 0).slice(0, 8);
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -35,8 +35,8 @@ const Forecast: React.FC<ForecastProps> = ({ forecast }) => {
                             />
                         </div>
                         <div className="forecast-temp">
-                            <span className="temp-high">{Math.round(item.main.temp_max)}°</span>
-                            <span className="temp-low">{Math.round(item.main.temp_min)}°</span>
+                        <span className="temp-high">{(Math.round(item.main.temp_max * 10) / 10).toFixed(1)}°</span>
+                        <span className="temp-low">{(Math.round(item.main.temp_min * 10) / 10).toFixed(1)}°</span>
                         </div>
                         <div className="forecast-desc">
                             {item.weather[0].description}

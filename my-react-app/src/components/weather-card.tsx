@@ -41,22 +41,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
 
             <div className="weather-details">
                 <div className="detail-item">
-                    <span className="label">Min/Max:</span>
+                    <span className="label">Max/Min:</span>
                     <span className="value">
-            {Math.round(weather.main.temp_min)}° / {Math.round(weather.main.temp_max)}°
+                    {Math.round(weather.main.temp_max)}° / {Math.round(weather.main.temp_min)}°
           </span>
-                </div>
-                <div className="detail-item">
-                    <span className="label">Humidity:</span>
-                    <span className="value">{weather.main.humidity}%</span>
-                </div>
-                <div className="detail-item">
-                    <span className="label">Pressure:</span>
-                    <span className="value">{weather.main.pressure} hPa</span>
-                </div>
-                <div className="detail-item">
-                    <span className="label">Wind:</span>
-                    <span className="value">{weather.wind.speed} m/s</span>
+
                 </div>
                 <div className="detail-item">
                     <span className="label">Sunrise:</span>
@@ -66,6 +55,19 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
                     <span className="label">Sunset:</span>
                     <span className="value">{formatTime(weather.sys.sunset)}</span>
                 </div>
+                <div className="detail-item">
+                    <span className="label">Humidity:</span>
+                    <span className="value">{weather.main.humidity}%</span>
+                </div>
+                <div className="detail-item">
+                    <span className="label">Wind:</span>
+                    <span className="value">{weather.wind.speed} m/s</span>
+                </div>
+                <div className="detail-item">
+                    <span className="label">Pressure:</span>
+                    <span className="value">{weather.main.pressure} hPa</span>
+                </div>
+                
             </div>
         </div>
     );
