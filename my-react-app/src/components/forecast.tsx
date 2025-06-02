@@ -1,0 +1,1 @@
+export {}; // Add this line if the file has no imports/exports
