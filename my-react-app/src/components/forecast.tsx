@@ -8,7 +8,7 @@ interface ForecastProps {
 
 const Forecast: React.FC<ForecastProps> = ({ forecast }) => {
     // Get daily forecasts (one per day)
-    const dailyForecasts = forecast.list.filter((item, index) => index % 8 === 0).slice(0, 8);
+    const dailyForecasts = forecast.list.filter((item, index) => index % 8 === 0).slice(0, 6);
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
